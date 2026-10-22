@@ -1,0 +1,105 @@
+                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     CHANGE LOG OF SPACIOUS-PADDING
+
+                              Protesilaos
+                          info@protesilaos.com
+                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+This document contains the release notes for each tagged commit on the
+project’s main git repository:
+<https://github.com/protesilaos/spacious-padding>.
+
+The newest release is at the top.  For further details, please consult
+the manual: <https://protesilaos.com/emacs/spacious-padding>.
+
+Table of Contents
+─────────────────
+
+1. Version 0.9.0 on 2026-09-20
+2. Version 0.8.0 on 2025-12-13
+
+
+1 Version 0.9.0 on 2026-09-20
+═════════════════════════════
+
+  This is a small version that addresses a minor inconvenience with the
+  Emacs daemon process reporting an `unspecified-bg' under certain
+  circumstances. The workaround I defined ensures that we always use a
+  known colour value.
+
+  Other than that, the `margin' face, which was introduced in Emacs
+  version 31, is also handled by `spacious-padding-mode'.
+
+
+2 Version 0.8.0 on 2025-12-13
+═════════════════════════════
+
+  This release introduces some nice refinements and fixes a couple of
+  subtle bugs.
+
+
+2.1 Subtle mode and header line
+───────────────────────────────
+
+  The new user option `spacious-padding-subtle-frame-lines' supersedes
+  the `~spacious-padding-subtle-mode-line'. It does the same thing,
+  namely, of making the mode lines use only a thin line instead of a
+  background. Though it extends this feature to header lines as well.
+
+  The documentation string of `spacious-padding-subtle-frame-lines'
+  describes the technicalities and includes examples. In short, we can
+  associate a keyword with either a face that has a foreground color or
+  a color value directly. For the convenience of the user, the package
+  also defines the faces `spacious-padding-line-active' and
+  `spacious-padding-line-inactive'. Here is a sample configuration:
+
+  ┌────
+  │ ;; Read the doc string of `spacious-padding-subtle-mode-line' as it
+  │ ;; is very flexible.  Here we make the mode lines be a single
+  │ ;; overline, while header lines have an underline.
+  │ (setq spacious-padding-subtle-frame-lines
+  │       '( :mode-line-active spacious-padding-line-active
+  │          :mode-line-inactive spacious-padding-line-inactive
+  │          :header-line-active spacious-padding-line-active
+  │          :header-line-inactive spacious-padding-line-inactive))
+  └────
+
+  In the future, we might decide that other elements can benefit from
+  this style.
+
+
+2.2 The header line underline is spaced further away from the text
+──────────────────────────────────────────────────────────────────
+
+  As noted above, when `spacious-padding-subtle-frame-lines' is
+  configured to cover header lines, those will be drawn with an
+  underline. This will not intersect with the text of the header line.
+
+  Normally, underlines cut through letters that descend below the
+  baseline, such as the letters `g' and `y'. We choose to avoid that
+  because it makes for a cleaner interface (though I personally think it
+  is not a good style for paragraph text, because of the rivers of
+  negative space it introduces).
+
+  This specific design is available for Emacs version 29 or higher.
+  Users of Emacs 28 must set `x-underline-at-descent-line' to a
+  non-`nil' value. Though note that this has a global effect: we cannot
+  limit it to a single face.
+
+  Thanks to Steven Allen for covering this in pull request 37:
+  <https://github.com/protesilaos/spacious-padding/pull/37>. Steven has
+  assigned copyright to the Free Software Foundation.
+
+
+2.3 The `spacious-padding-widths' can affect Custom buttons
+───────────────────────────────────────────────────────────
+
+  This is about the buttons we find in buffers of the Custom system. For
+  example, we get such a buffer after we do `M-x customize'.
+
+  The relevant keyword is `:custom-button-width'. It is set to a number
+  of spaces for padding. Here is the default value and, as always, the
+  documentation cover the details:
+
+  #+begin_src emacs-lisp (setq spacious-padding-widths …  …
