@@ -3,19 +3,21 @@
 #+author: Dasker
 #+author: Joe Teahen
 
-#+property: header-args:emacs-lisp :tangle ./init.el
+#+property: header-args:emacs-lisp :tangle ~/.config/emacs/init.el
 #+auto_tangle: t
 
 * Split Custom Files
 This bit of code splits all emacs writing of custom variables to a different file. This just keeps my ~init.el~ file looking like I expect.
 
 #+begin_src emacs-lisp
-; When you do automatic config changing, put the changes in custom.el
-; instead of this init file
-; Change
+  ; When you do automatic config changing, put the changes in custom.el
+  ; instead of this init file
+  ; Change
 (setq custom-file
       (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+
+(when (file-exists-p custom-file)
+  (load custom-file))
 #+end_src
 
 * Package Management Setup
@@ -35,9 +37,12 @@ This bit of code splits all emacs writing of custom variables to a different fil
   (package-refresh-contents))
 
 ;; Auto tangle org files like emacs.org
-(use-package org-auto-tangle
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
+(use-package org
+  :ensure t
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t))))
 #+end_src
 
 ** ~use-package~ Setup
@@ -107,6 +112,19 @@ Sets up auto updates of packages!
   ;; Ensure tabs is turned on globally
   (tab-bar-mode 1))
 #+end_src
+** PDF Tools
+Live PDF Viewing
+#+begin_src emacs-lisp
+(add-hook 'pdf-view-mode-hook (lambda () (auto-revert-mode 1)))
+#+end_src
+*** Tab List
+Dependency for pdf-tools (Live PDF Preview)
+#+begin_src emacs-lisp
+  (use-package tablist
+    :ensure t
+    :hook (tabulated-list-mode . tablist-minor-mode))
+#+end_src
+
 ** Helpful Package
 #+begin_src emacs-lisp
   (use-package helpful
@@ -164,7 +182,7 @@ Sets up auto updates of packages!
     (modus-themes-bold-constructs t)
     (modus-themes-italic-constructs t)
     :config
-    (modus-themes-load-theme 'modus-vivendi-deuteranopia))
+    (load-theme 'modus-vivendi-deuteranopia))
 #+end_src
 ** Rainbow Delimiters Package
 Colors paired characters to try to differentiate them to the eye.
@@ -317,12 +335,12 @@ This is a section related to setting up the ability to use different keybindings
   (evil-collection-init))
 
 ;; Automatically tangle our emacs.org config file on save
-(defun dasker/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/emacs.org"))
-    ;; Dyanamic scoping to the resuce
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+;;(defun dasker/org-babel-tangle-config ()
+;;  (when (string-equal (buffer-file-name)
+;;                      (expand-file-name "~/.config/emacs/emacs.org"))
+;;    ;; Dyanamic scoping to the resuce
+;;    (let ((org-confirm-babel-evaluate nil))
+;;      (org-babel-tangle))))
 
 ;; Set hook to try to run above function on orgmode save
 (add-hook 'org-mode-hook
@@ -389,16 +407,16 @@ Base minibuffer completions frontend (works with the emacs backend).
   (savehist-mode))
 
 ;; Make minibuffer appear at center of screen
-
-(use-package vertico-posframe
-  :after vertico
-  :custom
-  ;; Keep the popup reasonably small
-  (vertico-posframe-height 15)
-  (vertico-posframe-min-height 1)
-  (vertico-posframe-border-width 1)
-  :config
-  (vertico-posframe-mode 1))
+;; Causing slowness?
+;;(use-package vertico-posframe
+;;  :after vertico
+;;  :custom
+;;  ;; Keep the popup reasonably small
+;;  (vertico-posframe-height 15)
+;;  (vertico-posframe-min-height 1)
+;;  (vertico-posframe-border-width 1)
+;;  :config
+;;  (vertico-posframe-mode 1))
 #+end_src
 
 ** Marginalia
@@ -431,7 +449,7 @@ Allows for out-of-order pattern matching in minibuffer.
 ** Consult
 Better searches with narrowing features (more than just compeltions).
 
-#+begin_sc emacs-lisp
+#+begin_src emacs-lisp
   (use-package consult)
 #+end_src
 
@@ -485,7 +503,7 @@ Basically company but in the vertico style.
   (defun dasker/org-faces ()
     (set-face-attribute 'org-todo nil :height 0.7)
     (set-face-attribute 'org-done nil :height 0.7)
-    (set-face-attribute 'org-headline-done nil :foreground nil)
+    ;;(set-face-attribute 'org-headline-done nil :foreground nil)
     (set-face-attribute 'org-tag nil :height 0.7)
     (set-face-attribute 'org-priority nil :height 0.7)
     (set-face-attribute 'org-block-begin-line nil :height 0.7)
@@ -644,10 +662,9 @@ Basically company but in the vertico style.
 #+end_src
 ** Org Auto Tangle
 #+begin_src emacs-lisp
-  (use-package org-auto-tangle
-    :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory 
-    :defer t
-    :hook (org-src-mode . org-auto-tangle-mode))
+(use-package org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 ** Evil-Org
 #+begin_src emacs-lisp

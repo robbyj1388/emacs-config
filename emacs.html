@@ -1,0 +1,1468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-10-30 Fri 15:05 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Robby Emacs Configuration</title>
+<meta name="author" content="Robby L. Johnson III Dasker Joe Teahen" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Robby Emacs Configuration</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgb3cf93a">1. Split Custom Files</a></li>
+<li><a href="#org88668cf">2. Package Management Setup</a>
+<ul>
+<li><a href="#org4dd36f1">2.1. <code>use-package</code> Setup</a></li>
+</ul>
+</li>
+<li><a href="#org3a540bb">3. Startup Stuff</a>
+<ul>
+<li><a href="#orge4f872f">3.1. Keep Folders Clean</a></li>
+<li><a href="#org713875c">3.2. Auto updates</a></li>
+</ul>
+</li>
+<li><a href="#org21487e4">4. Emacs Utilities</a>
+<ul>
+<li><a href="#orgf91cbc2">4.1. Which Key Package</a></li>
+<li><a href="#org3af3253">4.2. Ace Window Manager</a></li>
+<li><a href="#org4acfa8e">4.3. PDF Tools</a>
+<ul>
+<li><a href="#org15d3cb5">4.3.1. Tab List</a></li>
+</ul>
+</li>
+<li><a href="#org3f9122e">4.4. Helpful Package</a></li>
+</ul>
+</li>
+<li><a href="#orgbc7cd66">5. UI Improvements</a>
+<ul>
+<li><a href="#orgf0b0959">5.1. Emacs Startup and Basic UI</a></li>
+<li><a href="#orgff4636e">5.2. Line and Column UI</a></li>
+<li><a href="#org0737bcd">5.3. Color Theme <code>modus-themes</code></a></li>
+<li><a href="#org273906a">5.4. Rainbow Delimiters Package</a></li>
+<li><a href="#org4bd9ff0">5.5. Modeline</a>
+<ul>
+<li><a href="#orgd4d7c15">5.5.1. Doom Mode Line</a></li>
+</ul>
+</li>
+<li><a href="#org6ebf299">5.6. Spacious Padding</a></li>
+</ul>
+</li>
+<li><a href="#org7dc4657">6. Editing Improvements</a>
+<ul>
+<li><a href="#org0ecf786">6.1. Tabs</a></li>
+<li><a href="#org0d30e4c">6.2. Tool Tip Injections</a></li>
+<li><a href="#org868a8ab">6.3. Electric Pairs</a></li>
+<li><a href="#org918d6fa">6.4. Window Open Behavior</a></li>
+<li><a href="#orgd9ed9b3">6.5. Spell Check</a></li>
+<li><a href="#org3bd44c2">6.6. Template System (<code>yasnippet</code>)</a></li>
+</ul>
+</li>
+<li><a href="#org3d21f04">7. Keybindings</a>
+<ul>
+<li><a href="#org1051626">7.1. Becoming Evil</a></li>
+<li><a href="#orgcbeebdb">7.2. Visual Adjustments</a></li>
+<li><a href="#org204c043">7.3. Default Keybindings</a>
+<ul>
+<li><a href="#orgddc207d">7.3.1. Tabs</a></li>
+<li><a href="#orgca8cdfe">7.3.2. ESC Prompts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org77d480f">8. Minibuffer/Buffer Completions</a>
+<ul>
+<li><a href="#orge6954c5">8.1. Vertico</a></li>
+<li><a href="#org905227c">8.2. Marginalia</a></li>
+<li><a href="#org8d15b27">8.3. Orderless</a></li>
+<li><a href="#org1f9175b">8.4. Consult</a></li>
+<li><a href="#org32e82aa">8.5. Embark</a></li>
+<li><a href="#org9283d8b">8.6. Corfu</a></li>
+</ul>
+</li>
+<li><a href="#orgc5ac514">9. Org Mode</a>
+<ul>
+<li><a href="#org8aa807a">9.1. Org Faces</a></li>
+<li><a href="#orgdea27da">9.2. Basic Setup</a></li>
+<li><a href="#org89eca73">9.3. Org Auto Tangle</a></li>
+<li><a href="#org408351a">9.4. Evil-Org</a></li>
+<li><a href="#org26186a8">9.5. Citations</a>
+<ul>
+<li><a href="#org02868f8">9.5.1. <code>citar</code></a></li>
+</ul>
+</li>
+<li><a href="#orgba5ae8d">9.6. Visual Column Alignment</a></li>
+<li><a href="#org41c2ce3">9.7. Org Modern</a></li>
+<li><a href="#org60db21e">9.8. Org Tempo</a></li>
+<li><a href="#org2e9f21c">9.9. Org Code Listings</a></li>
+<li><a href="#org2e949c4">9.10. Org Babel Languages Configuration</a></li>
+</ul>
+</li>
+<li><a href="#org390c507">10. Terminals and Shells</a>
+<ul>
+<li><a href="#orge3be216">10.1. vterm</a></li>
+<li><a href="#orgeca80ad">10.2. Vscode Terminal Buffer</a>
+<ul>
+<li><a href="#org792baba">10.2.1. Function</a></li>
+<li><a href="#org32a93ee">10.2.2. Keybind</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb3cf93a" class="outline-2">
+<h2 id="orgb3cf93a"><span class="section-number-2">1.</span> Split Custom Files</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This bit of code splits all emacs writing of custom variables to a different file. This just keeps my <code>init.el</code> file looking like I expect.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  ; When you do automatic config changing, put the changes in custom.el
+  ; instead of this init file
+  ; Change
+(setq custom-file
+      (expand-file-name "custom.el" user-emacs-directory))
+
+(when (file-exists-p custom-file)
+  (load custom-file))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org88668cf" class="outline-2">
+<h2 id="org88668cf"><span class="section-number-2">2.</span> Package Management Setup</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Loads the default package manager
+(require 'package)
+
+;; Loads 3 different package archives
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+	("org" . "https://orgmode.org/elpa/")
+	("elpa" . "https://elpa.gnu.org/packages/")))
+
+;; Essentially APT Update
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; Auto tangle org files like emacs.org
+(use-package org
+  :ensure t
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t))))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org4dd36f1" class="outline-3">
+<h3 id="org4dd36f1"><span class="section-number-3">2.1.</span> <code>use-package</code> Setup</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Install the use-package package manager
+(require 'use-package)
+;; Update some use-package options
+;; Set default to be ensure instead of no-ensure
+;; AKA don't be lazy unless I say so
+(setq use-package-always-ensure t)       ; Turns ensure on by default
+(setq use-package-compute-statistics t)  ; Turns on startup statistics
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3a540bb" class="outline-2">
+<h2 id="org3a540bb"><span class="section-number-2">3.</span> Startup Stuff</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orge4f872f" class="outline-3">
+<h3 id="orge4f872f"><span class="section-number-3">3.1.</span> Keep Folders Clean</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  ;; moves backup files to .emacs.d/tmp/backups
+  (setq backup-directory-alist
+        `(("." .
+           ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+
+  ;; auto-saves
+  (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+  (setq auto-save-list-file-prefix
+        (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
+        auto-save-file-name-transforms
+        `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+
+  (use-package no-littering)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org713875c" class="outline-3">
+<h3 id="org713875c"><span class="section-number-3">3.2.</span> Auto updates</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Sets up auto updates of packages!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package auto-package-update
+    :demand t
+    :custom
+    (auto-package-update-interval 7)
+    (auto-package-update-prompt-before-update t)
+    (auto-package-update-hide-results t)
+    :config
+    (auto-package-update-maybe)
+    (auto-package-update-at-time "09:00"))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org21487e4" class="outline-2">
+<h2 id="org21487e4"><span class="section-number-2">4.</span> Emacs Utilities</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgf91cbc2" class="outline-3">
+<h3 id="orgf91cbc2"><span class="section-number-3">4.1.</span> Which Key Package</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package which-key
+    :defer nil
+    :diminish which-key-mode
+    :config (which-key-mode)
+    :custom
+    (which-key-idle-delay 0.5))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3af3253" class="outline-3">
+<h3 id="org3af3253"><span class="section-number-3">4.2.</span> Ace Window Manager</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ace-window
+  :ensure t
+  :bind
+  ("C-a" . ace-window)
+  :custom
+  (aw-dispatch-always t)
+  (aw-keys '(?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+  :config
+  ;; Ensure tabs is turned on globally
+  (tab-bar-mode 1))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4acfa8e" class="outline-3">
+<h3 id="org4acfa8e"><span class="section-number-3">4.3.</span> PDF Tools</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Live PDF Viewing
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-hook 'pdf-view-mode-hook (lambda () (auto-revert-mode 1)))
+</pre>
+</div>
+</div>
+<div id="outline-container-org15d3cb5" class="outline-4">
+<h4 id="org15d3cb5"><span class="section-number-4">4.3.1.</span> Tab List</h4>
+<div class="outline-text-4" id="text-4-3-1">
+<p>
+Dependency for pdf-tools (Live PDF Preview)
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package tablist
+    :ensure t
+    :hook (tabulated-list-mode . tablist-minor-mode))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3f9122e" class="outline-3">
+<h3 id="org3f9122e"><span class="section-number-3">4.4.</span> Helpful Package</h3>
+<div class="outline-text-3" id="text-4-4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbc7cd66" class="outline-2">
+<h2 id="orgbc7cd66"><span class="section-number-2">5.</span> UI Improvements</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orgf0b0959" class="outline-3">
+<h3 id="orgf0b0959"><span class="section-number-3">5.1.</span> Emacs Startup and Basic UI</h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (setq inhibit-splash-screen t)    ; No splash screen.
+  (setq inhibit-startup-message t)  ; No startup message.
+
+  (setq frame-title-format "Robby Emacs")
+
+  (scroll-bar-mode -1)          ; Disable visual scrolbar
+  (tool-bar-mode -1)            ; Disable the toolbar
+  (tooltip-mode -1)             ; Disable tooltips
+  (fringe-mode '(1 . 1))        ; Sets frame to a minimum of one character
+  (menu-bar-mode  -1)           ; Disable the menu bar
+
+  (setq ring-bell-function 'ignore) ; Turn off bell/screen flash
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgff4636e" class="outline-3">
+<h3 id="orgff4636e"><span class="section-number-3">5.2.</span> Line and Column UI</h3>
+<div class="outline-text-3" id="text-5-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (column-number-mode)                 ; Adds column number to mode line
+  (global-display-line-numbers-mode t) ; Adds line numbers
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+  (setopt display-fill-column-indicator-column 80)
+  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  vterm-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0737bcd" class="outline-3">
+<h3 id="org0737bcd"><span class="section-number-3">5.3.</span> Color Theme <code>modus-themes</code></h3>
+<div class="outline-text-3" id="text-5-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package modus-themes
+    :ensure t
+    :demand t
+    :custom
+    (modus-themes-common-palette-overrides
+     '((fg-region unspecified)        ;; highlight not change underlying style 
+       (fg-paren-match (extrabold)))) ;; matching parenthesis are bolded
+
+    ;; changes the highlighting of completions
+    (modus-themes-completions '((matches . (bold))
+                                (selection . (extrabold italic))))
+
+    ;; adds bold to some syntax elements
+    (modus-themes-bold-constructs t)
+    (modus-themes-italic-constructs t)
+    :config
+    (load-theme 'modus-vivendi-deuteranopia))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org273906a" class="outline-3">
+<h3 id="org273906a"><span class="section-number-3">5.4.</span> Rainbow Delimiters Package</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+Colors paired characters to try to differentiate them to the eye.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package rainbow-delimiters
+    :defer t
+    :hook (prog-mode . rainbow-delimiters-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4bd9ff0" class="outline-3">
+<h3 id="org4bd9ff0"><span class="section-number-3">5.5.</span> Modeline</h3>
+<div class="outline-text-3" id="text-5-5">
+</div>
+<div id="outline-container-orgd4d7c15" class="outline-4">
+<h4 id="orgd4d7c15"><span class="section-number-4">5.5.1.</span> Doom Mode Line</h4>
+<div class="outline-text-4" id="text-5-5-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package doom-modeline   
+    :ensure t   
+    :init (doom-modeline-mode 1)   
+    :custom 
+    (doom-modeline-height 25)      ; Increases the overall height of the modeline bar
+    (doom-modeline-icon-scale 1.0) ; Scales the icon size relative to the font (try 0.9 or 1.1 if needed)
+    (doom-modeline-v-adjust 0.05)) ; Adjusts vertical position to push text away from icons
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6ebf299" class="outline-3">
+<h3 id="org6ebf299"><span class="section-number-3">5.6.</span> Spacious Padding</h3>
+<div class="outline-text-3" id="text-5-6">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package spacious-padding
+    :config
+    (spacious-padding-mode 1))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7dc4657" class="outline-2">
+<h2 id="org7dc4657"><span class="section-number-2">6.</span> Editing Improvements</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org0ecf786" class="outline-3">
+<h3 id="org0ecf786"><span class="section-number-3">6.1.</span> Tabs</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+Dealing with how tabs are handled in emacs <b>something I don't like about emacs, this is a first</b>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (setq custom-tab-width 4)
+  (setq tab-width custom-tab-width)
+
+  (defun disable-tabs () (setq indent-tabs-mode nil))
+  (defun enable-tabs ()
+    (local-set-key (kbd "TAB") 'tab-to-tab-stop)
+    (setq indent-tabs-mode t)
+    (setq tab-width custom-tab-width))
+
+  (add-hook 'prog-mode-hook 'disable-tabs)
+  (add-hook 'makefile-mode-hook 'enable-tabs)
+
+  (setq-default electric-indent-inhibit t)
+  (setq backward-delete-char-untabify-method 'hungry)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0d30e4c" class="outline-3">
+<h3 id="org0d30e4c"><span class="section-number-3">6.2.</span> Tool Tip Injections</h3>
+<div class="outline-text-3" id="text-6-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package marginalia
+  :ensure t
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org868a8ab" class="outline-3">
+<h3 id="org868a8ab"><span class="section-number-3">6.3.</span> Electric Pairs</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+Automatically closes paired characters when typing them (i.e., {}).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (electric-pair-mode 1)
+
+  ;; Region wraps
+  (with-eval-after-load 'evil
+    (evil-define-key 'visual 'electric-pair-mode-map
+      (kbd "C-{") 'insert-pair)
+    (evil-define-key 'visual 'electric-pair-mode-map
+      (kbd "C-&lt;") 'insert-pair)
+    (evil-define-key 'visual 'electric-pair-mode-map
+      (kbd "C-(") 'insert-pair)
+    (evil-define-key 'visual 'electric-pair-mode-map
+      (kbd "C-\"") 'insert-pair)
+    (evil-define-key 'visual 'electric-pair-mode-map
+      (kbd "M-[") 'insert-pair))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org918d6fa" class="outline-3">
+<h3 id="org918d6fa"><span class="section-number-3">6.4.</span> Window Open Behavior</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+Stops Emacs from messing with window layouts too much and routes buffers to tabs instead.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;;;; Direct all buffers to open in a dedicated workspace tab automatically
+;;
+;;(setq display-buffer-alist
+;;      `(;; Add buffers to EXCLUDE here
+;;        (,(rx (or "*Messages*" "*Warnings*" "*Errors*" "vscod-vterm-window" "*Process List*")) . (nil))
+;;        
+;;        ;; Open everything else in a new tab
+;;        (".*" . (display-buffer-in-new-tab (reusable-frames . t)))))
+
+;; Prevent emacs from resizing windows unevenly across actions
+(customize-set-variable 'even-window-sizes nil)
+
+(setq tab-bar-new-tab-choice "*scratch*"   ; New tabs start fresh with a scratch pad
+      tab-bar-tab-hints nil)               ; Hides numbers so the bar stays tidy
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd9ed9b3" class="outline-3">
+<h3 id="orgd9ed9b3"><span class="section-number-3">6.5.</span> Spell Check</h3>
+<div class="outline-text-3" id="text-6-5">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package flyspell
+    :defer t
+    :hook
+    (text-mode . flyspell-mode)
+    (prog-mode . flyspell-prog-mode)
+    :custom 
+    (ispell-extra-args '("--lang=en_US")))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3bd44c2" class="outline-3">
+<h3 id="org3bd44c2"><span class="section-number-3">6.6.</span> Template System (<code>yasnippet</code>)</h3>
+<div class="outline-text-3" id="text-6-6">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package yasnippet
+    :ensure t
+    :hook ((text-mode
+            prog-mode
+            conf-mode
+            snippet-mode) . yas-minor-mode-on))
+
+  ;; Sample Snippets
+  (use-package yasnippet-snippets
+    :after yasnippet)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3d21f04" class="outline-2">
+<h2 id="org3d21f04"><span class="section-number-2">7.</span> Keybindings</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+This is a section related to setting up the ability to use different keybindings. Keybindings for particular packages or behaviors will be located with the code for that package. Default keybindings (i.e., scale text) is located in this section.
+</p>
+</div>
+<div id="outline-container-org1051626" class="outline-3">
+<h3 id="org1051626"><span class="section-number-3">7.1.</span> Becoming Evil</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">
+;; Vim keybindings
+(use-package evil
+  :init
+  (setq evil-undo-system 'undo-redo)
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+;; Turn non-evil vim buffers to evil vim buffers
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+;; Automatically tangle our emacs.org config file on save
+;;(defun dasker/org-babel-tangle-config ()
+;;  (when (string-equal (buffer-file-name)
+;;                      (expand-file-name "~/.config/emacs/emacs.org"))
+;;    ;; Dyanamic scoping to the resuce
+;;    (let ((org-confirm-babel-evaluate nil))
+;;      (org-babel-tangle))))
+
+;; Set hook to try to run above function on orgmode save
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook
+                      #'dasker/org-babel-tangle-config)))
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcbeebdb" class="outline-3">
+<h3 id="orgcbeebdb"><span class="section-number-3">7.2.</span> Visual Adjustments</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+Set keybinds for text sizing
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org204c043" class="outline-3">
+<h3 id="org204c043"><span class="section-number-3">7.3.</span> Default Keybindings</h3>
+<div class="outline-text-3" id="text-7-3">
+</div>
+<div id="outline-container-orgddc207d" class="outline-4">
+<h4 id="orgddc207d"><span class="section-number-4">7.3.1.</span> Tabs</h4>
+<div class="outline-text-4" id="text-7-3-1">
+<p>
+Tmux-style like tabs
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Tmux style prefix setup
+(define-prefix-command 'tmux-prefix-map)
+
+;; C-a c -&gt; Open New Tab
+(define-key 'tmux-prefix-map (kbd "c") 'tab-duplicate) 
+
+;; C-a n -&gt; Next Tab
+(define-key tmux-prefix-map (kbd "n") 'tab-next) 
+;; C-a p -&gt; Previous Tab
+(define-key tmux-prefix-map (kbd "p") 'tab-previous)
+
+;; Fire ace window if you double tap C-a
+(define-key tmux-prefix-map (kbd "C-a") 'ace-window)
+
+;; C-a to point to this new map
+(global-set-key (kbd "C-a") tmux-prefix-map)
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgca8cdfe" class="outline-4">
+<h4 id="orgca8cdfe"><span class="section-number-4">7.3.2.</span> ESC Prompts</h4>
+<div class="outline-text-4" id="text-7-3-2">
+<p>
+ESC quits prompts
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(global-set-key (kbd "&lt;escape&gt;") 'keyboard-escape-quit)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org77d480f" class="outline-2">
+<h2 id="org77d480f"><span class="section-number-2">8.</span> Minibuffer/Buffer Completions</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+This is a section to handle the minibuffer completion framework for my emacs
+</p>
+</div>
+<div id="outline-container-orge6954c5" class="outline-3">
+<h3 id="orge6954c5"><span class="section-number-3">8.1.</span> Vertico</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+Base minibuffer completions frontend (works with the emacs backend).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package vertico
+  :bind (:map vertico-map
+              ("C-j" . 'vertico-next)
+              ("C-k" . 'vertico-previous))
+  :custom
+  (vertico-resize nil)             ;; Grow and shrink the Vertico mini-buffer
+  (vertico-cycle t)                ;; Enable cycling for `vertico-next/previous`
+  (context-menu-mode t)
+  ;;(enable-recursive-minibuffers t) ;; Allow for minibuffers in existing minibuffers
+  :init
+  (vertico-mode))
+
+;; Persist history over Emacs restarts.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; Make minibuffer appear at center of screen
+;; Causing slowness?
+;;(use-package vertico-posframe
+;;  :after vertico
+;;  :custom
+;;  ;; Keep the popup reasonably small
+;;  (vertico-posframe-height 15)
+;;  (vertico-posframe-min-height 1)
+;;  (vertico-posframe-border-width 1)
+;;  :config
+;;  (vertico-posframe-mode 1))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org905227c" class="outline-3">
+<h3 id="org905227c"><span class="section-number-3">8.2.</span> Marginalia</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+Adds info to the margins of the vertico completions.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package marginalia
+    :init
+    (marginalia-mode))
+
+  (use-package all-the-icons-completion
+    :after (marginalia all-the-icons)
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+    :init
+    (all-the-icons-completion-mode))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8d15b27" class="outline-3">
+<h3 id="org8d15b27"><span class="section-number-3">8.3.</span> Orderless</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+Allows for out-of-order pattern matching in minibuffer.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles partial-completion))))
+    (completion-category-defaults nil) ;; Disable defaults, use our settings
+    (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substringing
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1f9175b" class="outline-3">
+<h3 id="org1f9175b"><span class="section-number-3">8.4.</span> Consult</h3>
+<div class="outline-text-3" id="text-8-4">
+<p>
+Better searches with narrowing features (more than just compeltions).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package consult)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org32e82aa" class="outline-3">
+<h3 id="org32e82aa"><span class="section-number-3">8.5.</span> Embark</h3>
+<div class="outline-text-3" id="text-8-5">
+<p>
+Allows for the operation on completions in a minibuffer.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package embark
+    :bind
+    (("C-." . embark-act)
+     ("M-." . embark-dwim)
+     ("C-h B" . embark-bindings))
+    :custom
+    (embark-quit-after-action nil)
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none))))
+
+    )
+
+  ;; Consult with Embark
+  (use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9283d8b" class="outline-3">
+<h3 id="org9283d8b"><span class="section-number-3">8.6.</span> Corfu</h3>
+<div class="outline-text-3" id="text-8-6">
+<p>
+Basically company but in the vertico style.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package corfu
+    :custom
+    (corfu-cycle t)
+    (corfu-quit-at-boundary nil)
+    (corfu-quit-no-match nil)
+    :bind (("C-/" . completion-at-point)
+           :map corfu-map
+           ("C-j" . corfu-next)
+           ("C-k" . corfu-previous))
+    :init
+    (global-corfu-mode)
+    (corfu-history-mode))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc5ac514" class="outline-2">
+<h2 id="orgc5ac514"><span class="section-number-2">9.</span> Org Mode</h2>
+<div class="outline-text-2" id="text-9">
+</div>
+<div id="outline-container-org8aa807a" class="outline-3">
+<h3 id="org8aa807a"><span class="section-number-3">9.1.</span> Org Faces</h3>
+<div class="outline-text-3" id="text-9-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (defun dasker/org-faces ()
+    (set-face-attribute 'org-todo nil :height 0.7)
+    (set-face-attribute 'org-done nil :height 0.7)
+    ;;(set-face-attribute 'org-headline-done nil :foreground nil)
+    (set-face-attribute 'org-tag nil :height 0.7)
+    (set-face-attribute 'org-priority nil :height 0.7)
+    (set-face-attribute 'org-block-begin-line nil :height 0.7)
+    (set-face-attribute 'org-block-end-line nil :height 0.7)
+    (modus-themes-with-colors
+     (set-face-attribute 'org-hide nil :foreground bg-main :background bg-main))
+
+    (set-face-attribute 'org-level-1 nil :height 1.4)
+    (set-face-attribute 'org-level-2 nil :height 1.3)
+    (set-face-attribute 'org-level-3 nil :height 1.2)
+    (set-face-attribute 'org-level-4 nil :height 1.1)
+    (set-face-attribute 'org-level-5 nil :height 1.1)
+    (set-face-attribute 'org-level-6 nil :height 1.1)
+    (set-face-attribute 'org-level-7 nil :height 1.1)
+    (set-face-attribute 'org-level-8 nil :height 1.1)
+    (set-face-attribute 'org-block nil
+                        :foreground nil :inherit '(fixed-pitch default))
+    (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch default))
+    (set-face-attribute 'org-verbatim nil
+                        :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil
+                        :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil
+                        :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-document-info-keyword nil
+                        :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-document-title nil
+                        :weight 'bold :height 1.8)
+    (require 'org-indent)
+    (set-face-attribute 'org-indent
+                        nil :inherit '(org-hide fixed-pitch))
+    (require 'org-faces)
+    (set-face-attribute 'org-latex-and-related nil :inherit 'fixed-pitch)
+    (setq org-todo-keyword-faces
+          '(("PROGRESS" . (:inherit (warning org-todo)))
+            ("WAITING" . (:inherit (shadow org-todo)))))
+    )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdea27da" class="outline-3">
+<h3 id="orgdea27da"><span class="section-number-3">9.2.</span> Basic Setup</h3>
+<div class="outline-text-3" id="text-9-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (defun dasker/org-mode-setup ()
+    (org-indent-mode 1)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1)
+    (setq evil-auto-indent nil))
+
+  (use-package org
+    :hook ((org-mode . dasker/org-mode-setup)
+           ;; inhibits the auto pairing of '&lt;' characters
+           (org-mode . (lambda () 
+                         (setq-local electric-pair-inhibit-predicate
+                                     '(lambda (c)
+                                        (if (char-equal c 60) t nil))))))
+    :custom
+    ;; Basic
+    (undo-limit 50000)                   ;; lower undo-limit for performance
+    (org-list-allow-alphabetical 1)      ;; allow alphabetical lists
+    (org-startup-with-inline-images 1)   ;; show images on startup
+    (org-hide-emphasis-markers t)        ;; hide the emphasis markers
+    (org-hide-leading-stars t)          ;; hide the leading stars of heading
+    (org-ellipsis " ")                   ;; folded indicator
+    (org-pretty-entities t)              ;; utf8 characters in entities
+    (org-startup-folded 'fold)           ;; start with evertyhing folded 
+    (org-fold-catch-invisible-edits 'show-and-error)
+    (org-catch-invisible-edits 'show-and-error)
+    (org-special-ctrl-a/e t)
+    (org-insert-heading-respect-content t)
+
+    ;; src blocks
+    (org-edit-src-content-indentation 0) ;; no spaces at start of src block
+    (org-src-fontify-natively t)         ;; use native fonts
+    (org-src-tab-acts-natively t)        ;; take tab back
+    (org-latex-src-block-backend 'engraved) ;; typesetting src blocks latex
+
+    ;; Task
+    (org-log-done 'time)      ;; log time when done with a task
+    (org-log-into-drawer t)   ;; log into a drawer so I can hide it
+    (org-lowest-priority ?C)  ;; lowest prioirty for task is C
+    (org-default-priority ?B) ;; default priority is B
+    (org-todo-keywords        ;; adds different todo keywords
+     '((sequence
+        "TODO(t)" "PROGRESS(p)" "WAITING(w)"
+        "|"
+        "DONE(d)")))
+    (org-priority-faces
+     '((?A . (:inherit (bold org-priority)))
+       (?B . (:inherit (org-priority)))
+       (?C . (:inherit (shadow org-priority)))))
+
+    ;; Tags
+    (org-tags-column 0)     ;; put tags right after header
+    (org-auto-align-tags 1) ;; align tags automatically
+    (org-tag-alist '(("idea" . ?i)
+                     ("research" . ?r)
+                     (:startgroup . nil)
+                     ("personal" . ?p)
+                     ("work" . ?w)
+                     (:endgroup . nil)))
+
+    ;; Org Agenda
+    (org-agenda-start-with-log-mode t) ;; start agenda in log mode
+    (org-agenda-files                  ;; where to find agenda files
+     '("~/orgfiles/refile.org"
+       "~/orgfiles/ideas.org"
+       "~/orgfiles/work.org"
+       "~/orgfiles/personal.org"))
+    (org-agenda-start-on-weekday 0)    ;; start on sunday
+    (org-agenda-window-setup 'current-window)
+
+    ;; LaTeX
+    (org-latex-compiler "lualatex")   ;; use lualatex to export
+    (org-highlight-latex-and-related  ;; latex hl
+     '(native latex script entities))
+  
+    ;; Capture
+    (org-refile-targets
+     '((org-agenda-files . (:level 1))))
+    (org-refile-use-outline-path 'file)
+    (org-capture-templates
+     '(("t" "Tasks")
+       ("tt" "Task" entry (file "~/orgfiles/refile.org")
+        "* TODO %?\n %U\n %i" :empty-lines 1)
+       ("tw" "Work Task" entry (file "~/orgfiles/work.org")
+        "* TODO %? :work:\n %U\n %i" :empty-lines 1)
+       ("tp" "Personal Task" entry (file "~/orgfiles/personal.org")
+        "* TODO %? :personal:\n %U\n %i" :empty-lines 1)
+       ("tr" "Research Task" entry (file "~/orgfiles/research.org")
+        "* TODO %? :research:\n %U\n %i" :empty-lines 1)
+       ("i" "Idea")
+       ("ii" "Idea" entry (file "~/orgfiles/ideas.org")
+        "* TODO %? :idea:\n %U\n %i" :empty-lines 1)
+       ("ir" "Research Idea" entry (file "~/orgfiles/research.org")
+        "* TODO %? :research:idea:\n %U\n %i" :empty-lines 1)))
+  
+    :config
+    (dasker/org-faces)
+    (add-hook 'modus-themes-after-load-theme-hook #'dasker/org-faces)
+    (add-to-list 'org-link-frame-setup '(file . find-file))
+    (require 'ox)
+    (add-to-list 'org-latex-classes
+                 '("extarticle" "\\documentclass{extarticle}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    (setq org-image-actual-width nil)
+    (with-eval-after-load 'ox-html
+      (setq org-html-htmlize-output-type nil))
+    )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org89eca73" class="outline-3">
+<h3 id="org89eca73"><span class="section-number-3">9.3.</span> Org Auto Tangle</h3>
+<div class="outline-text-3" id="text-9-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org408351a" class="outline-3">
+<h3 id="org408351a"><span class="section-number-3">9.4.</span> Evil-Org</h3>
+<div class="outline-text-3" id="text-9-4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package evil-org
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org26186a8" class="outline-3">
+<h3 id="org26186a8"><span class="section-number-3">9.5.</span> Citations</h3>
+<div class="outline-text-3" id="text-9-5">
+</div>
+<div id="outline-container-org02868f8" class="outline-4">
+<h4 id="org02868f8"><span class="section-number-4">9.5.1.</span> <code>citar</code></h4>
+<div class="outline-text-4" id="text-9-5-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package citar
+  :after all-the-icons
+  :custom
+  (org-cite-global-bibliography '("~/orgfiles/refs/Orged.bib"
+                                  "~/Documents/cv/content/me.bib"))
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (citar-bibliography org-cite-global-bibliography)
+  (citar-notes-paths '("~/orgfiles/refs/notes/"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup)
+  :config
+  (defvar citar-indicator-files-icons
+    (citar-indicator-create
+     :symbol (all-the-icons-faicon
+              "file-o"
+              :face 'all-the-icons-green
+              :v-adjust -0.1)
+     :function #'citar-has-files
+     :padding "  " ; need this because the default padding is too low for these icons
+     :tag "has:files"))
+
+  (defvar citar-indicator-links-icons
+    (citar-indicator-create
+     :symbol (all-the-icons-octicon
+              "link"
+              :face 'all-the-icons-orange
+              :v-adjust 0.01)
+     :function #'citar-has-links
+     :padding "  "
+     :tag "has:links"))
+
+  (defvar citar-indicator-notes-icons
+    (citar-indicator-create
+     :symbol (all-the-icons-material
+              "speaker_notes"
+              :face 'all-the-icons-blue
+              :v-adjust -0.3)
+     :function #'citar-has-notes
+     :padding "  "
+     :tag "has:notes"))
+
+  (defvar citar-indicator-cited-icons
+    (citar-indicator-create
+     :symbol (all-the-icons-faicon
+              "circle-o"
+              :face 'all-the-icons-green)
+     :function #'citar-is-cited
+     :padding "  "
+     :tag "is:cited"))
+
+  (setq citar-indicators
+        (list citar-indicator-files-icons
+              citar-indicator-links-icons
+              citar-indicator-notes-icons
+              citar-indicator-cited-icons)))
+
+(use-package citar-embark
+  :after (citar embark)
+  :no-require
+  :config (citar-embark-mode))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgba5ae8d" class="outline-3">
+<h3 id="orgba5ae8d"><span class="section-number-3">9.6.</span> Visual Column Alignment</h3>
+<div class="outline-text-3" id="text-9-6">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  ;; Center org 80 character line in buffer
+  (defun dasker/org-mode-visual-fill ()
+    (setq visual-fill-column-width 80
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+  (use-package visual-fill-column
+    :hook ((org-mode . dasker/org-mode-visual-fill)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org41c2ce3" class="outline-3">
+<h3 id="org41c2ce3"><span class="section-number-3">9.7.</span> Org Modern</h3>
+<div class="outline-text-3" id="text-9-7">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package org-modern 
+    :hook ((org-mode . org-modern-mode)
+           (org-agenda-finalize . org-modern-agenda))
+    :config
+    (set-face-attribute 'org-modern-symbol nil
+                        :height robby-default-font-size)
+    :custom
+    (org-modern-keyword nil)
+    (org-modern-priority nil)
+    (org-modern-tag nil)
+    (org-modern-timestamp nil)
+    (org-modern-todo nil)
+    (org-modern-table nil)
+    (org-modern-block-name nil)
+    (org-modern-block-fringe nil)
+  
+    ;; Agenda Styling
+    (org-agenda-tags-column 0)
+    (org-agenda-block-separator ?-))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org60db21e" class="outline-3">
+<h3 id="org60db21e"><span class="section-number-3">9.8.</span> Org Tempo</h3>
+<div class="outline-text-3" id="text-9-8">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (with-eval-after-load 'org
+    (require 'org-tempo)
+
+    ;; Added one at a time
+    (add-to-list 'org-structure-template-alist
+                 '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist
+                 '("jv" . "src java")))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2e9f21c" class="outline-3">
+<h3 id="org2e9f21c"><span class="section-number-3">9.9.</span> Org Code Listings</h3>
+<div class="outline-text-3" id="text-9-9">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (use-package engrave-faces
+    :after org)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2e949c4" class="outline-3">
+<h3 id="org2e949c4"><span class="section-number-3">9.10.</span> Org Babel Languages Configuration</h3>
+<div class="outline-text-3" id="text-9-10">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (with-eval-after-load 'org
+    (setq org-src-preserve-indentation t)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (java . t)
+       (latex . t)
+       (python . t)
+       (makefile . t)
+       (C . t)))
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-babel-python-command "python3"))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org390c507" class="outline-2">
+<h2 id="org390c507"><span class="section-number-2">10.</span> Terminals and Shells</h2>
+<div class="outline-text-2" id="text-10">
+</div>
+<div id="outline-container-orge3be216" class="outline-3">
+<h3 id="orge3be216"><span class="section-number-3">10.1.</span> vterm</h3>
+<div class="outline-text-3" id="text-10-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package vterm
+  :defer t
+  :commands (vterm
+             vterm-other-window
+             projectile-run-vterm
+             projectile-run-vterm-other-window))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgeca80ad" class="outline-3">
+<h3 id="orgeca80ad"><span class="section-number-3">10.2.</span> Vscode Terminal Buffer</h3>
+<div class="outline-text-3" id="text-10-2">
+</div>
+<div id="outline-container-org792baba" class="outline-4">
+<h4 id="org792baba"><span class="section-number-4">10.2.1.</span> Function</h4>
+<div class="outline-text-4" id="text-10-2-1">
+<p>
+Launch vscode like terminal in vertically split buffer
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (defun launch-xterm ()
+    (interactive)
+    (let ((buf (get-buffer "vscode-vterm-window")))
+      (if (and buf (get-buffer-window buf))
+          ;; If it's visible, hide it
+          (delete-windows-on buf)
+        ;; If it's hidden or doesn't exist, display it
+        (let ((new-win (split-window-below)))
+          (select-window new-win)
+          (if buf
+              (switch-to-buffer buf)
+            (vterm "vscode-vterm-window"))))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org32a93ee" class="outline-4">
+<h4 id="org32a93ee"><span class="section-number-4">10.2.2.</span> Keybind</h4>
+<div class="outline-text-4" id="text-10-2-2">
+<p>
+Open Vscode terminal in vertical buffer with C-`.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (global-set-key (kbd "C-`") 'launch-xterm)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Robby L. Johnson III Dasker Joe Teahen</p>
+<p class="date">Created: 2026-10-30 Fri 15:05</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

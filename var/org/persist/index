@@ -1,21 +1,9 @@
 ((:container
   ((elisp org-element--headline-cache)
    (elisp org-element--cache))
-  :persist-file "80/b236fd-5d7a-4f0b-bacc-bff1c7fb21ca" :associated
-  (:hash "7925274df45789e92fff54af2b349d5c" :file "/home/robbyj1388/Documents/school/prog-lang/hw2.org" :inode 51130315)
-  :expiry 30 :last-access 1791842278.6909637 :last-access-hr "2026-10-12T17:57:58-0400")
- (:container
-  ((elisp org-element--headline-cache)
-   (elisp org-element--cache))
-  :persist-file "62/b93811-c3df-4cfd-af9d-990ec1c74dbc" :associated
-  (:hash "3d3f9958ce34674006627908556c28a5" :file "/home/robbyj1388/.config/emacs/joe-setup/emacs.org" :inode 50227356)
-  :expiry 30 :last-access 1791826997.380624 :last-access-hr "2026-10-12T13:43:17-0400")
- (:container
-  ((elisp org-element--headline-cache)
-   (elisp org-element--cache))
-  :persist-file "79/985276-27f9-40eb-999c-62430e8e20d1" :associated
-  (:hash "1b97bf36bb3673ce8fd141f877efcabd" :file "/home/robbyj1388/.config/emacs/emacs.org" :inode 50227232)
-  :expiry 30 :last-access 1792620610.5008175 :last-access-hr "2026-10-21T18:10:10-0400")
+  :persist-file "fe/7f6791-4293-46e9-a300-92decc03eea3" :associated
+  (:hash "4c0e6f1e795ca8e10aeccf39addfcdf8" :file "/home/robbyj1388/.config/emacs/emacs.org" :inode 50215946)
+  :expiry 30 :last-access 1793386694.139022 :last-access-hr "2026-10-30T14:58:14-0400")
  (:container
   ((index "3.1"))
-  :persist-file "6a/45d86e-6c91-46d7-b027-34c5492c0668" :associated nil :expiry never :last-access 1792620610.627535 :last-access-hr "2026-10-21T18:10:10-0400"))
+  :persist-file "fa/337d8d-0d72-4b1f-8726-12368681874d" :associated nil :expiry never :last-access 1793386694.1441622 :last-access-hr "2026-10-30T14:58:14-0400"))

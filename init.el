@@ -1,9 +1,11 @@
-; When you do automatic config changing, put the changes in custom.el
-; instead of this init file
-; Change
+  ; When you do automatic config changing, put the changes in custom.el
+  ; instead of this init file
+  ; Change
 (setq custom-file
       (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;; Loads the default package manager
 (require 'package)
@@ -20,9 +22,12 @@
   (package-refresh-contents))
 
 ;; Auto tangle org files like emacs.org
-(use-package org-auto-tangle
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
+(use-package org
+  :ensure t
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t))))
 
 ;; Install the use-package package manager
 (require 'use-package)
@@ -74,6 +79,12 @@
   ;; Ensure tabs is turned on globally
   (tab-bar-mode 1))
 
+(add-hook 'pdf-view-mode-hook (lambda () (auto-revert-mode 1)))
+
+  (use-package tablist
+    :ensure t
+    :hook (tabulated-list-mode . tablist-minor-mode))
+
   (use-package helpful
     :commands (helpful-callable helpful-variable helpful-command helpful-key))
 
@@ -121,7 +132,7 @@
     (modus-themes-bold-constructs t)
     (modus-themes-italic-constructs t)
     :config
-    (modus-themes-load-theme 'modus-vivendi-deuteranopia))
+    (load-theme 'modus-vivendi-deuteranopia))
 
   (use-package rainbow-delimiters
     :defer t
@@ -237,12 +248,12 @@
   (evil-collection-init))
 
 ;; Automatically tangle our emacs.org config file on save
-(defun dasker/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/emacs.org"))
-    ;; Dyanamic scoping to the resuce
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+;;(defun dasker/org-babel-tangle-config ()
+;;  (when (string-equal (buffer-file-name)
+;;                      (expand-file-name "~/.config/emacs/emacs.org"))
+;;    ;; Dyanamic scoping to the resuce
+;;    (let ((org-confirm-babel-evaluate nil))
+;;      (org-babel-tangle))))
 
 ;; Set hook to try to run above function on orgmode save
 (add-hook 'org-mode-hook
@@ -290,16 +301,16 @@
   (savehist-mode))
 
 ;; Make minibuffer appear at center of screen
-
-(use-package vertico-posframe
-  :after vertico
-  :custom
-  ;; Keep the popup reasonably small
-  (vertico-posframe-height 15)
-  (vertico-posframe-min-height 1)
-  (vertico-posframe-border-width 1)
-  :config
-  (vertico-posframe-mode 1))
+;; Causing slowness?
+;;(use-package vertico-posframe
+;;  :after vertico
+;;  :custom
+;;  ;; Keep the popup reasonably small
+;;  (vertico-posframe-height 15)
+;;  (vertico-posframe-min-height 1)
+;;  (vertico-posframe-border-width 1)
+;;  :config
+;;  (vertico-posframe-mode 1))
 
   (use-package marginalia
     :init
@@ -317,6 +328,8 @@
     (completion-category-overrides '((file (styles partial-completion))))
     (completion-category-defaults nil) ;; Disable defaults, use our settings
     (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substringing
+
+  (use-package consult)
 
   (use-package embark
     :bind
@@ -355,7 +368,7 @@
   (defun dasker/org-faces ()
     (set-face-attribute 'org-todo nil :height 0.7)
     (set-face-attribute 'org-done nil :height 0.7)
-    (set-face-attribute 'org-headline-done nil :foreground nil)
+    ;;(set-face-attribute 'org-headline-done nil :foreground nil)
     (set-face-attribute 'org-tag nil :height 0.7)
     (set-face-attribute 'org-priority nil :height 0.7)
     (set-face-attribute 'org-block-begin-line nil :height 0.7)
@@ -509,10 +522,9 @@
       (setq org-html-htmlize-output-type nil))
     )
 
-  (use-package org-auto-tangle
-    :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory 
-    :defer t
-    :hook (org-src-mode . org-auto-tangle-mode))
+(use-package org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 
   (use-package evil-org
     :after org

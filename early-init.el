@@ -8,6 +8,17 @@
 ;                            (ns-appearance . dark)
 ;                            (ns-transparent-titlebar . t)))
 
+;; Fix the Emacs 29.3 compatibility issue
+(unless (fboundp 'custom-initialize-after-file-load)
+  (defun custom-initialize-after-file-load (symbol exp)
+    "Compatibility fallback for Emacs 31 function missing in Emacs 29."
+    (if (not load-file-name)
+        (custom-initialize-set symbol exp)
+      (let ((file load-file-name))
+        (eval-after-load file
+          `(custom-initialize-set ',symbol ',exp))))))
+
+
 (setq inhibit-splash-screen t)    ; No splash screen.
 (setq inhibit-startup-message t)  ; No startup message.
 (setq robby-default-font-size 180)
