@@ -18,13 +18,14 @@
         (eval-after-load file
           `(custom-initialize-set ',symbol ',exp))))))
 
-
 (setq inhibit-splash-screen t)    ; No splash screen.
 (setq inhibit-startup-message t)  ; No startup message.
 (setq robby-default-font-size 180)
+(setq ring-bell-function 'ignore) ; Who likes this?
 
 (setq frame-title-format "Robby Emacs")
 
+(setq package-enable-at-startup nil) ; Disable package.el so we can use straight.el instead
 (scroll-bar-mode -1)          ; Disable visual scrolbar
 (tool-bar-mode -1)            ; Disable the toolbar
 (tooltip-mode -1)             ; Disable tooltips

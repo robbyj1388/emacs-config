@@ -7,35 +7,40 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; Loads the default package manager
-(require 'package)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; Loads 3 different package archives
-(setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-	("org" . "https://orgmode.org/elpa/")
-	("elpa" . "https://elpa.gnu.org/packages/")))
+(require 'use-package)
 
-;; Essentially APT Update
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+;; Tell use-package to utilize straight.el natively by default
+(setq straight-use-package-by-default t)
+(setq use-package-compute-statistics t)
+(setq straight-check-for-modifications '(find-when-checking))
+(setq straight-vc-git-default-clone-depth 1) 
+;; Hide the asynchronous byte-compilation warning buffers completely
+(setq native-comp-async-report-warnings-errors 'silent)
 
-;; Auto tangle org files like emacs.org
+
+;; Use the built-in org mode feature rather than cloning a raw git repo
 (use-package org
-  :ensure t
+  :straight (:type built-in)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t))))
-
-;; Install the use-package package manager
-(require 'use-package)
-;; Update some use-package options
-;; Set default to be ensure instead of no-ensure
-;; AKA don't be lazy unless I say so
-(setq use-package-always-ensure t)       ; Turns ensure on by default
-(setq use-package-compute-statistics t)  ; Turns on startup statistics
 
   ;; moves backup files to .emacs.d/tmp/backups
   (setq backup-directory-alist
@@ -78,6 +83,24 @@
   :config
   ;; Ensure tabs is turned on globally
   (tab-bar-mode 1))
+
+;; Ensure the background dependencies are installed first
+(use-package websocket :ensure t)
+(use-package ghub :ensure t)
+
+(use-package grip-mode
+  :ensure t
+  :after (websocket ghub) ; Ensures dependencies load first
+  :hook (markdown-mode . grip-mode)
+  :config
+  (setq grip-update-after-change t))
+
+(use-package org-markdown-preview
+  :straight (:repo "KarimAziev/org-markdown-preview"
+             :type git
+             :host github
+             :files ("*.el" "*.html"))
+  :commands (org-markdown-preview-mode))
 
 (add-hook 'pdf-view-mode-hook (lambda () (auto-revert-mode 1)))
 
@@ -244,22 +267,11 @@
 ;; Turn non-evil vim buffers to evil vim buffers
 (use-package evil-collection
   :after evil
+  :demand t
+  :custom
+  (evil-collection-repl-submit-state 'insert)
   :config
   (evil-collection-init))
-
-;; Automatically tangle our emacs.org config file on save
-;;(defun dasker/org-babel-tangle-config ()
-;;  (when (string-equal (buffer-file-name)
-;;                      (expand-file-name "~/.config/emacs/emacs.org"))
-;;    ;; Dyanamic scoping to the resuce
-;;    (let ((org-confirm-babel-evaluate nil))
-;;      (org-babel-tangle))))
-
-;; Set hook to try to run above function on orgmode save
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-hook 'after-save-hook
-                      #'dasker/org-babel-tangle-config)))
 
   (global-set-key (kbd "C-+") 'text-scale-increase)
   (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -366,161 +378,161 @@
     (corfu-history-mode))
 
   (defun dasker/org-faces ()
-    (set-face-attribute 'org-todo nil :height 0.7)
-    (set-face-attribute 'org-done nil :height 0.7)
-    ;;(set-face-attribute 'org-headline-done nil :foreground nil)
-    (set-face-attribute 'org-tag nil :height 0.7)
-    (set-face-attribute 'org-priority nil :height 0.7)
-    (set-face-attribute 'org-block-begin-line nil :height 0.7)
-    (set-face-attribute 'org-block-end-line nil :height 0.7)
-    (modus-themes-with-colors
-     (set-face-attribute 'org-hide nil :foreground bg-main :background bg-main))
-
-    (set-face-attribute 'org-level-1 nil :height 1.4)
-    (set-face-attribute 'org-level-2 nil :height 1.3)
-    (set-face-attribute 'org-level-3 nil :height 1.2)
-    (set-face-attribute 'org-level-4 nil :height 1.1)
-    (set-face-attribute 'org-level-5 nil :height 1.1)
-    (set-face-attribute 'org-level-6 nil :height 1.1)
-    (set-face-attribute 'org-level-7 nil :height 1.1)
-    (set-face-attribute 'org-level-8 nil :height 1.1)
-    (set-face-attribute 'org-block nil
-                        :foreground nil :inherit '(fixed-pitch default))
-    (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch default))
-    (set-face-attribute 'org-verbatim nil
-                        :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil
-                        :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil
-                        :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-document-info-keyword nil
-                        :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-document-title nil
-                        :weight 'bold :height 1.8)
-    (require 'org-indent)
-    (set-face-attribute 'org-indent
-                        nil :inherit '(org-hide fixed-pitch))
-    (require 'org-faces)
-    (set-face-attribute 'org-latex-and-related nil :inherit 'fixed-pitch)
-    (setq org-todo-keyword-faces
-          '(("PROGRESS" . (:inherit (warning org-todo)))
-            ("WAITING" . (:inherit (shadow org-todo)))))
+;;    (set-face-attribute 'org-todo nil :height 0.7)
+;;    (set-face-attribute 'org-done nil :height 0.7)
+;;    ;;(set-face-attribute 'org-headline-done nil :foreground nil)
+;;    (set-face-attribute 'org-tag nil :height 0.7)
+;;    (set-face-attribute 'org-priority nil :height 0.7)
+;;    (set-face-attribute 'org-block-begin-line nil :height 0.7)
+;;    (set-face-attribute 'org-block-end-line nil :height 0.7)
+;;    (modus-themes-with-colors
+;;     (set-face-attribute 'org-hide nil :foreground bg-main :background bg-main))
+;;
+;;    (set-face-attribute 'org-level-1 nil :height 1.4)
+;;    (set-face-attribute 'org-level-2 nil :height 1.3)
+;;    (set-face-attribute 'org-level-3 nil :height 1.2)
+;;    (set-face-attribute 'org-level-4 nil :height 1.1)
+;;    (set-face-attribute 'org-level-5 nil :height 1.1)
+;;    (set-face-attribute 'org-level-6 nil :height 1.1)
+;;    (set-face-attribute 'org-level-7 nil :height 1.1)
+;;    (set-face-attribute 'org-level-8 nil :height 1.1)
+;;    (set-face-attribute 'org-block nil
+;;                        :foreground nil :inherit '(fixed-pitch default))
+;;    (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch default))
+;;    (set-face-attribute 'org-verbatim nil
+;;                        :inherit '(shadow fixed-pitch))
+;;    (set-face-attribute 'org-special-keyword nil
+;;                        :inherit '(font-lock-comment-face fixed-pitch))
+;;    (set-face-attribute 'org-meta-line nil
+;;                        :inherit '(font-lock-comment-face fixed-pitch))
+;;    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+;;    (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
+;;    (set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
+;;    (set-face-attribute 'org-document-info-keyword nil
+;;                        :inherit '(shadow fixed-pitch))
+;;    (set-face-attribute 'org-document-title nil
+;;                        :weight 'bold :height 1.8)
+;;    (require 'org-indent)
+;;    (set-face-attribute 'org-indent
+;;                        nil :inherit '(org-hide fixed-pitch))
+;;    (require 'org-faces)
+;;    (set-face-attribute 'org-latex-and-related nil :inherit 'fixed-pitch)
+;;    (setq org-todo-keyword-faces
+;;          '(("PROGRESS" . (:inherit (warning org-todo)))
+;;            ("WAITING" . (:inherit (shadow org-todo)))))
     )
 
-  (defun dasker/org-mode-setup ()
-    (org-indent-mode 1)
-    (variable-pitch-mode 1)
-    (auto-fill-mode 0)
-    (visual-line-mode 1)
-    (setq evil-auto-indent nil))
-
-  (use-package org
-    :hook ((org-mode . dasker/org-mode-setup)
-           ;; inhibits the auto pairing of '<' characters
-           (org-mode . (lambda () 
-                         (setq-local electric-pair-inhibit-predicate
-                                     '(lambda (c)
-                                        (if (char-equal c 60) t nil))))))
-    :custom
-    ;; Basic
-    (undo-limit 50000)                   ;; lower undo-limit for performance
-    (org-list-allow-alphabetical 1)      ;; allow alphabetical lists
-    (org-startup-with-inline-images 1)   ;; show images on startup
-    (org-hide-emphasis-markers t)        ;; hide the emphasis markers
-    (org-hide-leading-stars t)          ;; hide the leading stars of heading
-    (org-ellipsis " ")                   ;; folded indicator
-    (org-pretty-entities t)              ;; utf8 characters in entities
-    (org-startup-folded 'fold)           ;; start with evertyhing folded 
-    (org-fold-catch-invisible-edits 'show-and-error)
-    (org-catch-invisible-edits 'show-and-error)
-    (org-special-ctrl-a/e t)
-    (org-insert-heading-respect-content t)
-
-    ;; src blocks
-    (org-edit-src-content-indentation 0) ;; no spaces at start of src block
-    (org-src-fontify-natively t)         ;; use native fonts
-    (org-src-tab-acts-natively t)        ;; take tab back
-    (org-latex-src-block-backend 'engraved) ;; typesetting src blocks latex
-
-    ;; Task
-    (org-log-done 'time)      ;; log time when done with a task
-    (org-log-into-drawer t)   ;; log into a drawer so I can hide it
-    (org-lowest-priority ?C)  ;; lowest prioirty for task is C
-    (org-default-priority ?B) ;; default priority is B
-    (org-todo-keywords        ;; adds different todo keywords
-     '((sequence
-        "TODO(t)" "PROGRESS(p)" "WAITING(w)"
-        "|"
-        "DONE(d)")))
-    (org-priority-faces
-     '((?A . (:inherit (bold org-priority)))
-       (?B . (:inherit (org-priority)))
-       (?C . (:inherit (shadow org-priority)))))
-
-    ;; Tags
-    (org-tags-column 0)     ;; put tags right after header
-    (org-auto-align-tags 1) ;; align tags automatically
-    (org-tag-alist '(("idea" . ?i)
-                     ("research" . ?r)
-                     (:startgroup . nil)
-                     ("personal" . ?p)
-                     ("work" . ?w)
-                     (:endgroup . nil)))
-
-    ;; Org Agenda
-    (org-agenda-start-with-log-mode t) ;; start agenda in log mode
-    (org-agenda-files                  ;; where to find agenda files
-     '("~/orgfiles/refile.org"
-       "~/orgfiles/ideas.org"
-       "~/orgfiles/work.org"
-       "~/orgfiles/personal.org"))
-    (org-agenda-start-on-weekday 0)    ;; start on sunday
-    (org-agenda-window-setup 'current-window)
-
-    ;; LaTeX
-    (org-latex-compiler "lualatex")   ;; use lualatex to export
-    (org-highlight-latex-and-related  ;; latex hl
-     '(native latex script entities))
-  
-    ;; Capture
-    (org-refile-targets
-     '((org-agenda-files . (:level 1))))
-    (org-refile-use-outline-path 'file)
-    (org-capture-templates
-     '(("t" "Tasks")
-       ("tt" "Task" entry (file "~/orgfiles/refile.org")
-        "* TODO %?\n %U\n %i" :empty-lines 1)
-       ("tw" "Work Task" entry (file "~/orgfiles/work.org")
-        "* TODO %? :work:\n %U\n %i" :empty-lines 1)
-       ("tp" "Personal Task" entry (file "~/orgfiles/personal.org")
-        "* TODO %? :personal:\n %U\n %i" :empty-lines 1)
-       ("tr" "Research Task" entry (file "~/orgfiles/research.org")
-        "* TODO %? :research:\n %U\n %i" :empty-lines 1)
-       ("i" "Idea")
-       ("ii" "Idea" entry (file "~/orgfiles/ideas.org")
-        "* TODO %? :idea:\n %U\n %i" :empty-lines 1)
-       ("ir" "Research Idea" entry (file "~/orgfiles/research.org")
-        "* TODO %? :research:idea:\n %U\n %i" :empty-lines 1)))
-  
-    :config
-    (dasker/org-faces)
-    (add-hook 'modus-themes-after-load-theme-hook #'dasker/org-faces)
-    (add-to-list 'org-link-frame-setup '(file . find-file))
-    (require 'ox)
-    (add-to-list 'org-latex-classes
-                 '("extarticle" "\\documentclass{extarticle}"
-                   ("\\section{%s}" . "\\section*{%s}")
-                   ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-    (setq org-image-actual-width nil)
-    (with-eval-after-load 'ox-html
-      (setq org-html-htmlize-output-type nil))
-    )
+;;  (defun dasker/org-mode-setup ()
+;;    (org-indent-mode 1)
+;;    (variable-pitch-mode 1)
+;;    (auto-fill-mode 0)
+;;    (visual-line-mode 1)
+;;    (setq evil-auto-indent nil))
+;;
+;;  (use-package org
+;;    :hook ((org-mode . dasker/org-mode-setup)
+;;           ;; inhibits the auto pairing of '<' characters
+;;           (org-mode . (lambda () 
+;;                         (setq-local electric-pair-inhibit-predicate
+;;                                     '(lambda (c)
+;;                                        (if (char-equal c 60) t nil))))))
+;;    :custom
+;;    ;; Basic
+;;    (undo-limit 50000)                   ;; lower undo-limit for performance
+;;    (org-list-allow-alphabetical 1)      ;; allow alphabetical lists
+;;    (org-startup-with-inline-images 1)   ;; show images on startup
+;;    (org-hide-emphasis-markers t)        ;; hide the emphasis markers
+;;    (org-hide-leading-stars t)          ;; hide the leading stars of heading
+;;    (org-ellipsis " ")                   ;; folded indicator
+;;    (org-pretty-entities t)              ;; utf8 characters in entities
+;;    (org-startup-folded 'fold)           ;; start with evertyhing folded 
+;;    (org-fold-catch-invisible-edits 'show-and-error)
+;;    (org-catch-invisible-edits 'show-and-error)
+;;    (org-special-ctrl-a/e t)
+;;    (org-insert-heading-respect-content t)
+;;
+;;    ;; src blocks
+;;    (org-edit-src-content-indentation 0) ;; no spaces at start of src block
+;;    (org-src-fontify-natively t)         ;; use native fonts
+;;    (org-src-tab-acts-natively t)        ;; take tab back
+;;    (org-latex-src-block-backend 'engraved) ;; typesetting src blocks latex
+;;
+;;    ;; Task
+;;    (org-log-done 'time)      ;; log time when done with a task
+;;    (org-log-into-drawer t)   ;; log into a drawer so I can hide it
+;;    (org-lowest-priority ?C)  ;; lowest prioirty for task is C
+;;    (org-default-priority ?B) ;; default priority is B
+;;    (org-todo-keywords        ;; adds different todo keywords
+;;     '((sequence
+;;        "TODO(t)" "PROGRESS(p)" "WAITING(w)"
+;;        "|"
+;;        "DONE(d)")))
+;;    (org-priority-faces
+;;     '((?A . (:inherit (bold org-priority)))
+;;       (?B . (:inherit (org-priority)))
+;;       (?C . (:inherit (shadow org-priority)))))
+;;
+;;    ;; Tags
+;;    (org-tags-column 0)     ;; put tags right after header
+;;    (org-auto-align-tags 1) ;; align tags automatically
+;;    (org-tag-alist '(("idea" . ?i)
+;;                     ("research" . ?r)
+;;                     (:startgroup . nil)
+;;                     ("personal" . ?p)
+;;                     ("work" . ?w)
+;;                     (:endgroup . nil)))
+;;
+;;    ;; Org Agenda
+;;    (org-agenda-start-with-log-mode t) ;; start agenda in log mode
+;;    (org-agenda-files                  ;; where to find agenda files
+;;     '("~/orgfiles/refile.org"
+;;       "~/orgfiles/ideas.org"
+;;       "~/orgfiles/work.org"
+;;       "~/orgfiles/personal.org"))
+;;    (org-agenda-start-on-weekday 0)    ;; start on sunday
+;;    (org-agenda-window-setup 'current-window)
+;;
+;;    ;; LaTeX
+;;    (org-latex-compiler "lualatex")   ;; use lualatex to export
+;;    (org-highlight-latex-and-related  ;; latex hl
+;;     '(native latex script entities))
+;;  
+;;    ;; Capture
+;;    (org-refile-targets
+;;     '((org-agenda-files . (:level 1))))
+;;    (org-refile-use-outline-path 'file)
+;;    (org-capture-templates
+;;     '(("t" "Tasks")
+;;       ("tt" "Task" entry (file "~/orgfiles/refile.org")
+;;        "* TODO %?\n %U\n %i" :empty-lines 1)
+;;       ("tw" "Work Task" entry (file "~/orgfiles/work.org")
+;;        "* TODO %? :work:\n %U\n %i" :empty-lines 1)
+;;       ("tp" "Personal Task" entry (file "~/orgfiles/personal.org")
+;;        "* TODO %? :personal:\n %U\n %i" :empty-lines 1)
+;;       ("tr" "Research Task" entry (file "~/orgfiles/research.org")
+;;        "* TODO %? :research:\n %U\n %i" :empty-lines 1)
+;;       ("i" "Idea")
+;;       ("ii" "Idea" entry (file "~/orgfiles/ideas.org")
+;;        "* TODO %? :idea:\n %U\n %i" :empty-lines 1)
+;;       ("ir" "Research Idea" entry (file "~/orgfiles/research.org")
+;;        "* TODO %? :research:idea:\n %U\n %i" :empty-lines 1)))
+;;  
+;;    :config
+;;    (dasker/org-faces)
+;;    (add-hook 'modus-themes-after-load-theme-hook #'dasker/org-faces)
+;;    (add-to-list 'org-link-frame-setup '(file . find-file))
+;;    (require 'ox)
+;;    (add-to-list 'org-latex-classes
+;;                 '("extarticle" "\\documentclass{extarticle}"
+;;                   ("\\section{%s}" . "\\section*{%s}")
+;;                   ("\\subsection{%s}" . "\\subsection*{%s}")
+;;                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+;;                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+;;                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+;;    (setq org-image-actual-width nil)
+;;    (with-eval-after-load 'ox-html
+;;      (setq org-html-htmlize-output-type nil))
+;;    )
 
 (use-package org-auto-tangle
   :defer t
@@ -597,33 +609,22 @@
   :no-require
   :config (citar-embark-mode))
 
-  ;; Center org 80 character line in buffer
-  (defun dasker/org-mode-visual-fill ()
-    (setq visual-fill-column-width 80
-          visual-fill-column-center-text t)
-    (visual-fill-column-mode 1))
-  (use-package visual-fill-column
-    :hook ((org-mode . dasker/org-mode-visual-fill)))
-
   (use-package org-modern 
     :hook ((org-mode . org-modern-mode)
-           (org-agenda-finalize . org-modern-agenda))
-    :config
-    (set-face-attribute 'org-modern-symbol nil
-                        :height robby-default-font-size)
+	   (org-agenda-finalize . org-modern-agenda))
     :custom
-    (org-modern-keyword nil)
-    (org-modern-priority nil)
-    (org-modern-tag nil)
-    (org-modern-timestamp nil)
-    (org-modern-todo nil)
-    (org-modern-table nil)
-    (org-modern-block-name nil)
-    (org-modern-block-fringe nil)
-  
-    ;; Agenda Styling
-    (org-agenda-tags-column 0)
-    (org-agenda-block-separator ?-))
+      (org-modern-keyword nil)
+      (org-modern-priority nil)
+      (org-modern-tag nil)
+      (org-modern-timestamp nil)
+      (org-modern-todo nil)
+      (org-modern-table nil)
+      (org-modern-block-name nil)
+      (org-modern-block-fringe nil)
+
+      ;; Agenda Styling
+      (org-agenda-tags-column 0)
+      (org-agenda-block-separator ?-))
 
   (with-eval-after-load 'org
     (require 'org-tempo)

@@ -1,17 +1,23 @@
-# Compiled
-*.elc
+# Ignore everything
+*
 
-# Packaging
-.cask/
-.eask/
-.eldev/
-.keg/
+# Allow root-level files
+!/*
 
-# Built distribution
-dist/
+# Allow specific configuration files
+!emacs.org
+!init.el
+!early-init.el
+!custom.el
+!README.org
 
-# Backup files
-*~
+# Allow custom directories
+!/lisp/
+!/lisp/**
+!/snippets/
+!/snippets/**
 
-# Undo-tree save-files
-*.~undo-tree
+# Explicitly exclude generated directories
+/straight/
+/var/
+/tmp/
