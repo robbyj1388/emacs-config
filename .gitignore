@@ -17,7 +17,15 @@
 !/snippets/
 !/snippets/**
 
+# Explicitly exclude dasker/joe og config
+/dasker-setup/
+/joe-setup/
+
 # Explicitly exclude generated directories
 /straight/
 /var/
 /tmp/
+/auto-save-list/
+/elpa/
+/transient/
+/eln-cache/
