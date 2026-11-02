@@ -1,5 +1,5 @@
-  ; When you do automatic config changing, put the changes in custom.el
   ; instead of this init file
+  ; When you do automatic config changing, put the changes in custom.el
   ; Change
 (setq custom-file
       (expand-file-name "custom.el" user-emacs-directory))
@@ -225,24 +225,24 @@
 (setq tab-bar-new-tab-choice "*scratch*"   ; New tabs start fresh with a scratch pad
       tab-bar-tab-hints nil)               ; Hides numbers so the bar stays tidy
 
-  (use-package flyspell
-    :defer t
-    :hook
-    (text-mode . flyspell-mode)
-    (prog-mode . flyspell-prog-mode)
-    :custom 
-    (ispell-extra-args '("--lang=en_US")))
+(use-package flyspell
+  :defer t
+  :hook
+  (text-mode . flyspell-mode)
+  (prog-mode . flyspell-prog-mode)
+  :custom 
+  (ispell-extra-args '("--lang=en_US")))
 
-  (use-package yasnippet
-    :ensure t
-    :hook ((text-mode
-            prog-mode
-            conf-mode
-            snippet-mode) . yas-minor-mode-on))
+(use-package yasnippet
+  :ensure t
+  :hook ((text-mode
+          prog-mode
+          conf-mode
+          snippet-mode) . yas-minor-mode-on))
 
-  ;; Sample Snippets
-  (use-package yasnippet-snippets
-    :after yasnippet)
+;; Sample Snippets
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 ;; Vim keybindings
 (use-package evil
@@ -324,58 +324,58 @@
 ;;  :config
 ;;  (vertico-posframe-mode 1))
 
-  (use-package marginalia
-    :init
-    (marginalia-mode))
+(use-package marginalia
+  :init
+  (marginalia-mode))
 
-  (use-package all-the-icons-completion
-    :after (marginalia all-the-icons)
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :init
-    (all-the-icons-completion-mode))
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
 
-  (use-package orderless
-    :custom
-    (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles partial-completion))))
-    (completion-category-defaults nil) ;; Disable defaults, use our settings
-    (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substringing
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil) ;; Disable defaults, use our settings
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substringing
 
-  (use-package consult)
+(use-package consult)
 
-  (use-package embark
-    :bind
-    (("C-." . embark-act)
-     ("M-." . embark-dwim)
-     ("C-h B" . embark-bindings))
-    :custom
-    (embark-quit-after-action nil)
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none))))
+(use-package embark
+  :bind
+  (("C-." . embark-act)
+   ("M-." . embark-dwim)
+   ("C-h B" . embark-bindings))
+  :custom
+  (embark-quit-after-action nil)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
 
-    )
+  )
 
-  ;; Consult with Embark
-  (use-package embark-consult
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
+;; Consult with Embark
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
-  (use-package corfu
-    :custom
-    (corfu-cycle t)
-    (corfu-quit-at-boundary nil)
-    (corfu-quit-no-match nil)
-    :bind (("C-/" . completion-at-point)
-           :map corfu-map
-           ("C-j" . corfu-next)
-           ("C-k" . corfu-previous))
-    :init
-    (global-corfu-mode)
-    (corfu-history-mode))
+(use-package corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-quit-at-boundary nil)
+  (corfu-quit-no-match nil)
+  :bind (("C-/" . completion-at-point)
+         :map corfu-map
+         ("C-j" . corfu-next)
+         ("C-k" . corfu-previous))
+  :init
+  (global-corfu-mode)
+  (corfu-history-mode))
 
   (defun dasker/org-faces ()
 ;;    (set-face-attribute 'org-todo nil :height 0.7)

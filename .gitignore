@@ -1,8 +1,5 @@
 # Ignore everything
-*
-
-# Allow root-level files
-!/*
+/*
 
 # Allow specific configuration files
 !emacs.org
@@ -16,16 +13,3 @@
 !/lisp/**
 !/snippets/
 !/snippets/**
-
-# Explicitly exclude dasker/joe og config
-/dasker-setup/
-/joe-setup/
-
-# Explicitly exclude generated directories
-/straight/
-/var/
-/tmp/
-/auto-save-list/
-/elpa/
-/transient/
-/eln-cache/

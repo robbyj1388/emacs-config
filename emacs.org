@@ -10,8 +10,8 @@
 This bit of code splits all emacs writing of custom variables to a different file. This just keeps my ~init.el~ file looking like I expect.
 
 #+begin_src emacs-lisp
-  ; When you do automatic config changing, put the changes in custom.el
   ; instead of this init file
+  ; When you do automatic config changing, put the changes in custom.el
   ; Change
 (setq custom-file
       (expand-file-name "custom.el" user-emacs-directory))
@@ -304,29 +304,28 @@ Stops Emacs from messing with window layouts too much and routes buffers to tabs
 
 ** Spell Check
 #+begin_src emacs-lisp
-  (use-package flyspell
-    :defer t
-    :hook
-    (text-mode . flyspell-mode)
-    (prog-mode . flyspell-prog-mode)
-    :custom 
-    (ispell-extra-args '("--lang=en_US")))
+(use-package flyspell
+  :defer t
+  :hook
+  (text-mode . flyspell-mode)
+  (prog-mode . flyspell-prog-mode)
+  :custom 
+  (ispell-extra-args '("--lang=en_US")))
 #+end_src
 
 ** Template System (~yasnippet~)
 #+begin_src emacs-lisp
-  (use-package yasnippet
-    :ensure t
-    :hook ((text-mode
-            prog-mode
-            conf-mode
-            snippet-mode) . yas-minor-mode-on))
+(use-package yasnippet
+  :ensure t
+  :hook ((text-mode
+          prog-mode
+          conf-mode
+          snippet-mode) . yas-minor-mode-on))
 
-  ;; Sample Snippets
-  (use-package yasnippet-snippets
-    :after yasnippet)
+;; Sample Snippets
+(use-package yasnippet-snippets
+  :after yasnippet)
 #+end_src
-
 * Keybindings
 This is a section related to setting up the ability to use different keybindings. Keybindings for particular packages or behaviors will be located with the code for that package. Default keybindings (i.e., scale text) is located in this section.
 ** Becoming Evil
@@ -435,78 +434,78 @@ Base minibuffer completions frontend (works with the emacs backend).
 Adds info to the margins of the vertico completions.
 
 #+begin_src emacs-lisp
-  (use-package marginalia
-    :init
-    (marginalia-mode))
+(use-package marginalia
+  :init
+  (marginalia-mode))
 
-  (use-package all-the-icons-completion
-    :after (marginalia all-the-icons)
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-    :init
-    (all-the-icons-completion-mode))
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
 #+end_src
 
 ** Orderless
 Allows for out-of-order pattern matching in minibuffer.
 
 #+begin_src emacs-lisp
-  (use-package orderless
-    :custom
-    (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles partial-completion))))
-    (completion-category-defaults nil) ;; Disable defaults, use our settings
-    (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substringing
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil) ;; Disable defaults, use our settings
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substringing
 #+end_src
 
 ** Consult
 Better searches with narrowing features (more than just compeltions).
 
 #+begin_src emacs-lisp
-  (use-package consult)
+(use-package consult)
 #+end_src
 
 ** Embark
 Allows for the operation on completions in a minibuffer.
 
 #+begin_src emacs-lisp
-  (use-package embark
-    :bind
-    (("C-." . embark-act)
-     ("M-." . embark-dwim)
-     ("C-h B" . embark-bindings))
-    :custom
-    (embark-quit-after-action nil)
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none))))
+(use-package embark
+  :bind
+  (("C-." . embark-act)
+   ("M-." . embark-dwim)
+   ("C-h B" . embark-bindings))
+  :custom
+  (embark-quit-after-action nil)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
 
-    )
+  )
 
-  ;; Consult with Embark
-  (use-package embark-consult
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
+;; Consult with Embark
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
 ** Corfu
 Basically company but in the vertico style.
 
 #+begin_src emacs-lisp
-  (use-package corfu
-    :custom
-    (corfu-cycle t)
-    (corfu-quit-at-boundary nil)
-    (corfu-quit-no-match nil)
-    :bind (("C-/" . completion-at-point)
-           :map corfu-map
-           ("C-j" . corfu-next)
-           ("C-k" . corfu-previous))
-    :init
-    (global-corfu-mode)
-    (corfu-history-mode))
+(use-package corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-quit-at-boundary nil)
+  (corfu-quit-no-match nil)
+  :bind (("C-/" . completion-at-point)
+         :map corfu-map
+         ("C-j" . corfu-next)
+         ("C-k" . corfu-previous))
+  :init
+  (global-corfu-mode)
+  (corfu-history-mode))
 #+end_src
 
 * Org Mode
