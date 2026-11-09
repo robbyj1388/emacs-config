@@ -80,18 +80,18 @@ This bit of code splits all emacs writing of custom variables to a different fil
 
 ** Auto updates
 Sets up auto updates of packages!
-
-#+begin_src emacs-lisp
-  (use-package auto-package-update
-    :demand t
-    :custom
-    (auto-package-update-interval 7)
-    (auto-package-update-prompt-before-update t)
-    (auto-package-update-hide-results t)
-    :config
-    (auto-package-update-maybe)
-    (auto-package-update-at-time "09:00"))
-#+end_src
+KEEPS BREAKING THINGS I MIGHT DELETE THIS TBH
+;;#+begin_src emacs-lisp
+;;  (use-package auto-package-update
+;;    :demand t
+;;    :custom
+;;    (auto-package-update-interval 7)
+;;    (auto-package-update-prompt-before-update t)
+;;    (auto-package-update-hide-results t)
+;;    :config
+;;    (auto-package-update-maybe)
+;;    (auto-package-update-at-time "09:00"))
+;;#+end_src
 
 * Emacs Utilities
 ** Which Key Package
@@ -170,7 +170,11 @@ Dependency for pdf-tools (Live PDF Preview)
 
   (setq ring-bell-function 'ignore) ; Turn off bell/screen flash
 #+end_src
-
+** 80 Character Line
+#+begin_src emacs-lisp
+  (setq-default fill-column 80)
+  (add-hook 'prog-mode-hook 'display-fill-column-mode)
+#+end_src
 ** Line and Column UI
 #+begin_src emacs-lisp
   (column-number-mode)                 ; Adds column number to mode line

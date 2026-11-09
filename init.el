@@ -56,16 +56,6 @@
 
   (use-package no-littering)
 
-  (use-package auto-package-update
-    :demand t
-    :custom
-    (auto-package-update-interval 7)
-    (auto-package-update-prompt-before-update t)
-    (auto-package-update-hide-results t)
-    :config
-    (auto-package-update-maybe)
-    (auto-package-update-at-time "09:00"))
-
   (use-package which-key
     :defer nil
     :diminish which-key-mode
@@ -123,6 +113,9 @@
   (menu-bar-mode  -1)           ; Disable the menu bar
 
   (setq ring-bell-function 'ignore) ; Turn off bell/screen flash
+
+  (setq-default fill-column 80)
+  (add-hook 'prog-mode-hook 'display-fill-column-mode)
 
   (column-number-mode)                 ; Adds column number to mode line
   (global-display-line-numbers-mode t) ; Adds line numbers
